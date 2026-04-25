@@ -37,8 +37,16 @@
                     "configurations": {
                         "production": {
                             "budgets": [
-                                { "type": "initial", "maximumWarning": "1mb", "maximumError": "5mb" },
-                                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "1mb",
+                                    "maximumError": "5mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "2kb",
+                                    "maximumError": "4kb"
+                                }
                             ],
                             "outputHashing": "all"
                         },
@@ -53,12 +61,37 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "configurations": {
-                        "production": { "buildTarget": "sakai-ng:build:production" },
-                        "development": { "buildTarget": "sakai-ng:build:development" }
+                        "production": {
+                            "buildTarget": "sakai-ng:build:production"
+                        },
+                        "development": {
+                            "buildTarget": "sakai-ng:build:development"
+                        }
                     },
                     "defaultConfiguration": "development"
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n"
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "tsConfig": "tsconfig.spec.json",
+                        "inlineStyleLanguage": "scss",
+                        "assets": [
+                            "src/favicon.ico",
+                            "src/assets"
+                        ],
+                        "styles": [
+                            "src/assets/styles.scss"
+                        ],
+                        "scripts": []
+                    }
                 }
             }
         }
+    },
+    "cli": {
+        "analytics": false
     }
 }

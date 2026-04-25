@@ -1,42 +1,47 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UsuarioModule } from './modules/usuario/usuario.module';
-import { NoteModule } from './modules/note/note.module';
-import { NoteshareModule } from './modules/noteshare/noteshare.module';
-import { AttachmentModule } from './modules/attachment/attachment.module';
-import { RecordatorioModule } from './modules/recordatorio/recordatorio.module';
+// import { AppService } from './app.service';
+import { UsuarioController } from './usuario/usuario.controller';
+import ormConfig from './config/orm.config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Usuario } from './usuario/model/usuario.model';
+import { ConfigModule } from '@nestjs/config';
+import { UsuarioService } from './usuario/usuario.service';
+import { Noteshare } from './noteshare/model/noteshare.model';
+import { Note } from './note/model/note.model';
+import { NoteShareController } from './noteshare/noteshare.controller';
+import { NoteShareService } from './noteshare/noteshare.service';
+import { NoteController } from './note/note.controller';
+import { NoteService } from './note/note.service';
+import { Attachment } from './attachment/model/attachment.model';
+import { AttachmentController } from './attachment/attachment.controller';
+import { AttachmentService } from './attachment/attachment.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      load: [ormConfig],
+      expandVariables: true,
     }),
-
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_NAME'),
-        autoLoadEntities: true,
-        synchronize: false,
-      }),
+      useFactory: ormConfig
     }),
-    
-    UsuarioModule,
-    NoteModule,
-    NoteshareModule,
-    AttachmentModule,
-    RecordatorioModule,
+    TypeOrmModule.forFeature([Usuario, Noteshare, Note, Attachment])
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [
+    AppController,
+    UsuarioController,
+    NoteShareController,
+    NoteController,
+    AttachmentController
+  ],
+  providers: [
+    // AppService
+    UsuarioService,
+    NoteShareService,
+    NoteService,
+    AttachmentService
+  ],
 })
-export class AppModule {}
+export class AppModule { }

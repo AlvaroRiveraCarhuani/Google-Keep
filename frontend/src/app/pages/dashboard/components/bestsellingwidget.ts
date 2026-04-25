@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
+import { BasicService } from '@/app/service/basic.service';
 
 @Component({
     standalone: true,
     selector: 'app-best-selling-widget',
     imports: [CommonModule, ButtonModule, MenuModule],
+    // providers: [],
     template: ` <div class="card">
         <div class="flex justify-between items-center mb-6">
             <div class="font-semibold text-xl">Best Selling Products</div>
@@ -91,7 +93,18 @@ import { MenuModule } from 'primeng/menu';
         </ul>
     </div>`
 })
-export class BestSellingWidget {
+export class BestSellingWidget implements OnInit {
+
+    service = inject(BasicService);
+    entityId = 1;
+
+    ngOnInit(): void {
+        console.warn('Hola Mundo!!!!!!!!!!!!!!!!!');
+        this.service.basePost(`notecontroller/getbyid/${this.entityId}`, {}).subscribe(
+            response => console.log(response),
+            error => console.error(error)
+        );
+    }
     menu = null;
 
     items = [
