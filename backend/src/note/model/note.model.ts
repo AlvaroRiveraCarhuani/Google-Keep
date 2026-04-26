@@ -1,24 +1,28 @@
-import { IsBoolean } from "class-validator";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, JoinColumn } from "typeorm";
+import { Usuario } from "../../usuario/model/usuario.model";
 
-@Entity()
+@Entity('note')
 export class Note {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ type: 'varchar', length: 255, nullable: false })
     title: string;
 
-    @Column()
+    @Column({ type: 'text', nullable: false })
     content: string;
 
-    @Column()
-    @IsBoolean()
+    @Column({ type: 'boolean', default: true })
     activo: boolean;
 
-    @CreateDateColumn()
+    // Relación con Usuario
+    @ManyToOne(() => Usuario, { nullable: false })
+    @JoinColumn({ name: 'usuario_id' })
+    usuario: Usuario;
+
+    @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     created_at: Date;
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     updated_at: Date;
 }
