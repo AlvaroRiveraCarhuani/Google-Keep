@@ -1,22 +1,27 @@
-import { IsInt, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsOptional, IsString, MaxLength, IsBoolean } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 
 export class CreateNoteDto {
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     @MaxLength(255)
-    title: string;
+    title?: string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
-    content: string;
+    content?: string;
 
-    @IsNotEmpty()
-    @IsInt()
-    usuarioId: number;
+    @IsOptional()
+    @IsString()
+    color?: string;
+
+    @IsOptional()
+    @IsBoolean()
+    is_pinned?: boolean;
 }
 
 export class UpdateNoteDto extends PartialType(CreateNoteDto) {
     @IsOptional()
+    @IsBoolean()
     activo?: boolean;
 }

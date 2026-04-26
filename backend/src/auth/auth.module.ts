@@ -11,8 +11,8 @@ import { JwtStrategy } from './jwt.strategy';
     UsuarioModule,
     PassportModule,
     JwtModule.register({
-      secret: 'PROTA_SECRET_KEY_123', // En producción esto va en variables de entorno (.env)
-      signOptions: { expiresIn: '1d' }, // El token dura 1 día
+      secret: 'estaponentelacontra', 
+      signOptions: { expiresIn: '1d' }, 
     }),
   ],
   providers: [AuthService, JwtStrategy],

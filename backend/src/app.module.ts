@@ -9,6 +9,7 @@ import { Usuario } from './usuario/model/usuario.model';
 import { Noteshare } from './noteshare/model/noteshare.model';
 import { Note } from './note/model/note.model';
 import { Attachment } from './attachment/model/attachment.model';
+import { Label } from './note/model/label.model';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { Attachment } from './attachment/model/attachment.model';
     AuthModule,
     UsuarioModule,
     NoteModule,
-    TypeOrmModule.forFeature([Usuario, Noteshare, Note, Attachment])
+    TypeOrmModule.forFeature([Usuario, Noteshare, Note, Attachment, Label])
   ],
   controllers: [],
   providers: [],

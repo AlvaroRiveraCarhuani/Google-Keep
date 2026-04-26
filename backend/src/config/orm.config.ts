@@ -1,9 +1,10 @@
 import { registerAs } from "@nestjs/config";
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
-import { Note } from "src/note/model/note.model";
-import { Noteshare } from "src/noteshare/model/noteshare.model";
-import { Usuario } from "src/usuario/model/usuario.model";
-import { Attachment } from "src/attachment/model/attachment.model";
+import { Note } from "../note/model/note.model";
+import { Noteshare } from "../noteshare/model/noteshare.model";
+import { Usuario } from "../usuario/model/usuario.model";
+import { Attachment } from "../attachment/model/attachment.model";
+import { Label } from "../note/model/label.model"; 
 
 export default registerAs(
     'orm.config',
@@ -14,7 +15,7 @@ export default registerAs(
         username: process.env.DB_USER || 'user_admin',
         password: process.env.DB_PASSWORD || 'password123',
         database: process.env.DB_NAME || 'google_keep_db',
-        entities: [Usuario, Noteshare, Note, Attachment],
+        entities: [Usuario, Noteshare, Note, Attachment, Label], 
         synchronize: true,
     }),
 );

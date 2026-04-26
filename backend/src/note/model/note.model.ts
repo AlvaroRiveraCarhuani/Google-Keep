@@ -1,28 +1,38 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, JoinColumn } from "typeorm";
-import { Usuario } from "../../usuario/model/usuario.model";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Usuario } from '../../usuario/model/usuario.model'; 
+import { Label } from './label.model';
 
-@Entity('note')
+@Entity()
 export class Note {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ type: 'varchar', length: 255, nullable: false })
-    title: string;
+  @Column({ nullable: true }) 
+  title: string;
 
-    @Column({ type: 'text', nullable: false })
-    content: string;
+  @Column({ type: 'text', nullable: true }) 
+  content: string;
 
-    @Column({ type: 'boolean', default: true })
-    activo: boolean;
+  @Column({ nullable: true })
+  color: string;
 
-    // Relación con Usuario
-    @ManyToOne(() => Usuario, { nullable: false })
-    @JoinColumn({ name: 'usuario_id' })
-    usuario: Usuario;
+  @Column({ default: true })
+  activo: boolean;
 
-    @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    created_at: Date;
+  @Column({ default: false })
+  is_pinned: boolean;
 
-    @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    updated_at: Date;
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @ManyToOne(() => Usuario)
+  @JoinColumn({ name: 'usuario_id' })
+  usuario: Usuario;
+
+  @ManyToMany(() => Label, (label) => label.notes)
+  @JoinTable({ name: 'note_labels' })
+  labels: Label[];
 }

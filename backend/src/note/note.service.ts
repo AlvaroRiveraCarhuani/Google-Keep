@@ -11,37 +11,63 @@ export class NoteService {
     private noteRepository: Repository<Note>,
   ) {}
 
-  async create(createNoteDto: CreateNoteDto): Promise<Note> {
-    const { usuarioId, ...noteData } = createNoteDto;
+  async create(createNoteDto: CreateNoteDto, usuarioId: number): Promise<Note> {
     const newNote = this.noteRepository.create({
-        ...noteData,
-        usuario: { id: usuarioId } as any
+      ...createNoteDto,
+      usuario: { id: usuarioId } as any,
+      activo: true
     });
     return await this.noteRepository.save(newNote);
-}
-
-  async findAll(): Promise<Note[]> {
-    return await this.noteRepository.find({ where: { activo: true }, order: { created_at: 'DESC' } });
   }
 
-  async findOne(id: number): Promise<Note> {
-    const note = await this.noteRepository.findOne({ where: { id, activo: true } });
-    if (!note) {
-      throw new NotFoundException(`Nota con ID ${id} no encontrada`);
-    }
+  async findAll(usuarioId: number): Promise<Note[]> {
+    return await this.noteRepository.find({
+      where: { usuario: { id: usuarioId }, activo: true },
+      order: { is_pinned: 'DESC', created_at: 'DESC' }
+    });
+  }
+
+  async findOne(id: number, usuarioId: number): Promise<Note> {
+    const note = await this.noteRepository.findOne({
+      where: { id, usuario: { id: usuarioId }, activo: true }
+    });
+    if (!note) throw new NotFoundException('Nota no encontrada o no tienes permiso');
     return note;
   }
 
-  async update(id: number, updateNoteDto: UpdateNoteDto): Promise<Note> {
-    const note = await this.findOne(id);
+  async update(id: number, updateNoteDto: UpdateNoteDto, usuarioId: number): Promise<Note> {
+    const note = await this.findOne(id, usuarioId);
     Object.assign(note, updateNoteDto);
     return await this.noteRepository.save(note);
   }
 
-  async remove(id: number): Promise<void> {
-    const note = await this.findOne(id);
-    // Borrado lógico cambiando 'activo' a false
+  async remove(id: number, usuarioId: number): Promise<void> {
+    const note = await this.findOne(id, usuarioId);
     note.activo = false;
     await this.noteRepository.save(note);
+  }
+
+  async findTrash(usuarioId: number): Promise<Note[]> {
+    return await this.noteRepository.find({
+      where: { usuario: { id: usuarioId }, activo: false },
+      order: { updated_at: 'DESC' }
+    });
+  }
+
+  async restore(id: number, usuarioId: number): Promise<Note> {
+    const note = await this.noteRepository.findOne({
+      where: { id, usuario: { id: usuarioId }, activo: false }
+    });
+    if (!note) throw new NotFoundException('Nota no encontrada en papelera');
+    note.activo = true;
+    return await this.noteRepository.save(note);
+  }
+
+  async hardDelete(id: number, usuarioId: number): Promise<void> {
+    const note = await this.noteRepository.findOne({
+      where: { id, usuario: { id: usuarioId }, activo: false }
+    });
+    if (!note) throw new NotFoundException('Nota no encontrada');
+    await this.noteRepository.remove(note); 
   }
 }
