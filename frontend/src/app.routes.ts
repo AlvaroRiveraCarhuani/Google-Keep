@@ -9,25 +9,33 @@ import { Recordatorios } from './app/pages/recordatorios/recordatorios';
 import { Etiquetas } from './app/pages/etiquetas/etiquetas';
 import { Archivar } from './app/pages/archivar/archivar';
 import { Papelera } from './app/pages/papelera/papelera';
+import { authGuard } from './app/guard/auth.guard';
 
 export const appRoutes: Routes = [
     {
         path: '',
+        pathMatch: 'full',
+        redirectTo: 'auth/login' 
+    },
+    {
+        path: '',
         component: AppLayout,
+        canActivate: [authGuard],
         children: [
-                { path: '', component: Dashboard },
-                { path: 'notas', component: Notas },
-                { path: 'recordatorios', component: Recordatorios },
-                { path: 'archivar', component: Archivar },
-                { path: 'papelera', component: Papelera },
-                { path: 'etiquetas', component: Etiquetas },
-            // { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
-            // { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') },
+            { path: 'dashboard', component: Dashboard },
+            { path: 'notas', component: Notas },
+            { path: 'recordatorios', component: Recordatorios },
+            { path: 'archivar', component: Archivar },
+            { path: 'papelera', component: Papelera },
+            { path: 'etiquetas', component: Etiquetas },
             { path: 'usuario', component: UsuarioListComponent}
         ]
     },
     { path: 'landing', component: Landing },
     { path: 'notfound', component: Notfound },
-    { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
+    { 
+        path: 'auth', 
+        loadChildren: () => import('./app/pages/auth/auth.routes').then(m => m.AUTH_ROUTES) 
+    },
     { path: '**', redirectTo: '/notfound' }
 ];
