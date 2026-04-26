@@ -15,6 +15,6 @@ export default registerAs(
         password: process.env.DB_PASSWORD || 'password123',
         database: process.env.DB_NAME || 'google_keep_db',
         entities: [Usuario, Noteshare, Note, Attachment],
-        synchronize: false,
+        synchronize: true,
     }),
 );
