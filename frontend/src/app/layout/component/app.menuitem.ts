@@ -10,7 +10,12 @@ import { filter } from 'rxjs/operators';
     imports: [CommonModule, RouterModule, RippleModule],
     template: `
         @if (root() && isVisible()) {
-            <div class="layout-menuitem-root-text">{{ item().label }}</div>
+            <div class="layout-menuitem-root-text">
+                @if (item().icon) {
+                    <i [ngClass]="item().icon" class="layout-menuitem-icon"></i>
+                }
+                {{ item().label }}
+            </div>
         }
         @if ((!hasRouterLink() || hasChildren()) && isVisible()) {
             <a [attr.href]="item().url" (click)="itemClick($event)" [ngClass]="item().class" [attr.target]="item().target" tabindex="0" pRipple>

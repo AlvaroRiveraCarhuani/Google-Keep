@@ -4,13 +4,23 @@ import { Dashboard } from './app/pages/dashboard/dashboard';
 import { Landing } from './app/pages/landing/landing';
 import { Notfound } from './app/pages/notfound/notfound';
 import { UsuarioListComponent } from './app/usuario/usuario-list/usuario-list.component';
+import { Notas } from './app/pages/notas/notas';
+import { Recordatorios } from './app/pages/recordatorios/recordatorios';
+import { Etiquetas } from './app/pages/etiquetas/etiquetas';
+import { Archivar } from './app/pages/archivar/archivar';
+import { Papelera } from './app/pages/papelera/papelera';
 
 export const appRoutes: Routes = [
     {
         path: '',
         component: AppLayout,
         children: [
-            { path: '', component: Dashboard },
+                { path: '', component: Dashboard },
+                { path: 'notas', component: Notas },
+                { path: 'recordatorios', component: Recordatorios },
+                { path: 'archivar', component: Archivar },
+                { path: 'papelera', component: Papelera },
+                { path: 'etiquetas', component: Etiquetas },
             // { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             // { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') },
             { path: 'usuario', component: UsuarioListComponent}

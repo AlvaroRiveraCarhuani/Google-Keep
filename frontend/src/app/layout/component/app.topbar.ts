@@ -3,13 +3,14 @@ import { MenuItem } from 'primeng/api';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
+import { InputTextModule } from 'primeng/inputtext';
 import { AppConfigurator } from './app.configurator';
 import { LayoutService } from '@/app/layout/service/layout.service';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator],
+    imports: [RouterModule, CommonModule, StyleClassModule, InputTextModule, AppConfigurator],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
             <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">
@@ -35,6 +36,13 @@ import { LayoutService } from '@/app/layout/service/layout.service';
                 </svg>
                 <span>SAKAI</span>
             </a>
+        </div>
+
+        <div class="layout-topbar-search hidden md:flex md:items-center md:ml-6">
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" placeholder="Buscar en tus notas, etiquetas o archivos..." (input)="onSearch($event)" class="w-full lg:w-80" />
+            </span>
         </div>
 
         <div class="layout-topbar-actions">
@@ -91,5 +99,11 @@ export class AppTopbar {
             ...state,
             darkTheme: !state.darkTheme
         }));
+    }
+
+    onSearch(event: Event) {
+        const value = (event.target as HTMLInputElement).value;
+        // UI-only implementation: emit or handle search later
+        console.log('Search input:', value);
     }
 }

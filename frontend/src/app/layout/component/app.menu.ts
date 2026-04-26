@@ -24,6 +24,17 @@ export class AppMenu {
     ngOnInit() {
         this.model = [
             {
+                label: 'Notas',
+                icon: 'pi pi-fw pi-book',
+                items: [
+                    { label: 'Notas', icon: 'pi pi-fw pi-pencil', routerLink: ['/notas'] },
+                    { label: 'Recordatorios', icon: 'pi pi-fw pi-bell', routerLink: ['/recordatorios'] },
+                    { label: 'Archivar', icon: 'pi pi-fw pi-archive', routerLink: ['/archivar'] },
+                    { label: 'Papelera', icon: 'pi pi-fw pi-trash', routerLink: ['/papelera'] },
+                    { label: 'Editar etiquetas', icon: 'pi pi-fw pi-tags', routerLink: ['/etiquetas'] }
+                ]
+            },
+            {
                 label: 'Home',
                 items: [
                     { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
