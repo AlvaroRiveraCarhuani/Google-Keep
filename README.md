@@ -1,4 +1,4 @@
-# 💡 Google Keep Clone - Pro Edition
+# Google Keep Clone - Pro Edition
 
 ![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![NestJS](https://img.shields.io/badge/nestjs-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
@@ -10,7 +10,7 @@ Una implementación moderna, segura y elegante del gestor de notas más popular,
 
 ---
 
-## 🏗️ Arquitectura del Sistema
+## Arquitectura del Sistema
 
 El proyecto sigue una arquitectura de **Tres Capas (3-Tier Architecture)** completamente aislada mediante contenedores:
 
@@ -20,7 +20,7 @@ El proyecto sigue una arquitectura de **Tres Capas (3-Tier Architecture)** compl
 
 ---
 
-## 🚀 Tecnologías Core
+## Tecnologías Core
 
 ### **Frontend**
 
@@ -41,17 +41,17 @@ El proyecto sigue una arquitectura de **Tres Capas (3-Tier Architecture)** compl
 
 ---
 
-## ✨ Características Principales
+## Características Principales
 
-* 🌑 **Modo Oscuro/Claro**: Adaptable según las preferencias del sistema.
-* 📋 **Notas y Listas**: Soporta tanto texto plano como checklists dinámicas.
-* 🔍 **Búsqueda Inteligente**: Filtrado instantáneo de notas en todas las secciones.
-* 🎨 **Personalización**: Cambio de colores, fijado de notas y gestión de etiquetas.
-* 🛡️ **Seguridad Multi-inquilino**: Cada usuario solo tiene acceso a su propia información.
+* **Modo Oscuro/Claro**: Adaptable según las preferencias del sistema.
+* **Notas y Listas**: Soporta tanto texto plano como checklists dinámicas.
+* **Búsqueda Inteligente**: Filtrado instantáneo de notas en todas las secciones.
+* **Personalización**: Cambio de colores, fijado de notas y gestión de etiquetas.
+* **Seguridad Multi-inquilino**: Cada usuario solo tiene acceso a su propia información.
 
 ---
 
-## 📖 Guía de Referencia y Despliegue
+## Guía de Referencia y Despliegue
 
 Esta sección contiene la información técnica original para la gestión del contenedor.
 
@@ -72,9 +72,9 @@ Esta sección contiene la información técnica original para la gestión del co
 
 ### Acceso a los Servicios
 
-* 🌍 **Frontend**: [http://localhost:4200](http://localhost:4200)
-* ⚙️ **Backend API**: [http://localhost:3000/api/v1](http://localhost:3000/api/v1)
-* 📚 **Documentación Swagger**: [http://localhost:3000/api](http://localhost:3000/api)
+* **Frontend**: [http://localhost:4200](http://localhost:4200)
+* **Backend API**: [http://localhost:3000/api/v1](http://localhost:3000/api/v1)
+* **Documentación Swagger**: [http://localhost:3000/api](http://localhost:3000/api)
 
 ### Comandos de Mantenimiento
 
@@ -86,10 +86,10 @@ Esta sección contiene la información técnica original para la gestión del co
 
 ---
 
-## 🛠️ Notas de Desarrollo
+## Notas de Desarrollo
 
 * No instalar dependencias fuera de Docker para mantener la paridad ambiental.
 * Las variables de entorno se gestionan en el archivo `.env` dentro de la carpeta `backend/`.
 
 ---
-*Desarrollado con ❤️ por el equipo de Google Keep Clone.*
+*Desarrollado por el equipo de Google Keep Clone.*
