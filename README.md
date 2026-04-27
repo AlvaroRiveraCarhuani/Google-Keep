@@ -1,4 +1,4 @@
-# Google Keep Clone - Pro Edition
+# Google Keep Clone
 
 ![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![NestJS](https://img.shields.io/badge/nestjs-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
@@ -90,6 +90,3 @@ Esta sección contiene la información técnica original para la gestión del co
 
 * No instalar dependencias fuera de Docker para mantener la paridad ambiental.
 * Las variables de entorno se gestionan en el archivo `.env` dentro de la carpeta `backend/`.
-
----
-*Desarrollado por el equipo de Google Keep Clone.*
