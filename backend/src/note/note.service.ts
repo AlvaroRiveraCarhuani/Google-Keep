@@ -1,55 +1,73 @@
-import { Injectable } from "@nestjs/common";
-import { Repository } from "typeorm";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Note } from "./model/note.model";
-import { NoteDto } from "./dto/note.dto";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Note } from './model/note.model';
+import { CreateNoteDto, UpdateNoteDto } from './dto/note.dto';
 
 @Injectable()
 export class NoteService {
-    constructor(
-        @InjectRepository(Note)
-        private readonly repository: Repository<Note>
-    ) {}
+  constructor(
+    @InjectRepository(Note)
+    private noteRepository: Repository<Note>,
+  ) {}
 
-    getAll() {
-        return this.repository.find();
-    }
+  async create(createNoteDto: CreateNoteDto, usuarioId: number): Promise<Note> {
+    const newNote = this.noteRepository.create({
+      ...createNoteDto,
+      usuario: { id: usuarioId } as any,
+      activo: true
+    });
+    return await this.noteRepository.save(newNote);
+  }
 
-    getById(id: number) {
-        var data = this.repository.findOne({
-            where: { id }
-        });
-        return data;
-    }
+  async findAll(usuarioId: number): Promise<Note[]> {
+    return await this.noteRepository.find({
+      where: { usuario: { id: usuarioId }, activo: true },
+      order: { is_pinned: 'DESC', created_at: 'DESC' }
+    });
+  }
 
-    async save(data: NoteDto) {
-        if(data.id != undefined && data.id != null && data.id != 0) {
-            const usuario = await this.repository.findOneBy({id: data.id});
-            if(!usuario) throw new Error(`Entidad con id ${data.id} no encontrado`);
+  async findOne(id: number, usuarioId: number): Promise<Note> {
+    const note = await this.noteRepository.findOne({
+      where: { id, usuario: { id: usuarioId }, activo: true }
+    });
+    if (!note) throw new NotFoundException('Nota no encontrada o no tienes permiso');
+    return note;
+  }
 
-            await this.repository.update({id: data.id}, data);
-            return 'Se actualizo correctamente!!!';
-        } else {
-            const entity = await this.repository.create(data);
-            await this.repository.save(entity);
-            return 'Se guardo correctamente!!!';
-        }
-    }
+  async update(id: number, updateNoteDto: UpdateNoteDto, usuarioId: number): Promise<Note> {
+    const note = await this.findOne(id, usuarioId);
+    Object.assign(note, updateNoteDto);
+    return await this.noteRepository.save(note);
+  }
 
-    async delete(id: number) {
-        var data = await this.findById(id);
-        if (!data) throw new Error(`Entidad con id ${id} no encontrado`);
-        await this.repository.delete({id: id});
-        return 'Se elimino correctamente!!!';
-    }
+  async remove(id: number, usuarioId: number): Promise<void> {
+    const note = await this.findOne(id, usuarioId);
+    note.activo = false;
+    await this.noteRepository.save(note);
+  }
 
-    async findById(id: number) {
-        const entity = await this.repository.findOne({
-            where: { id }
-        });
+  async findTrash(usuarioId: number): Promise<Note[]> {
+    return await this.noteRepository.find({
+      where: { usuario: { id: usuarioId }, activo: false },
+      order: { updated_at: 'DESC' }
+    });
+  }
 
-        if(!entity) throw new Error(`Entidad con id ${id} no encontrado`);
+  async restore(id: number, usuarioId: number): Promise<Note> {
+    const note = await this.noteRepository.findOne({
+      where: { id, usuario: { id: usuarioId }, activo: false }
+    });
+    if (!note) throw new NotFoundException('Nota no encontrada en papelera');
+    note.activo = true;
+    return await this.noteRepository.save(note);
+  }
 
-        return entity;
-    }
+  async hardDelete(id: number, usuarioId: number): Promise<void> {
+    const note = await this.noteRepository.findOne({
+      where: { id, usuario: { id: usuarioId }, activo: false }
+    });
+    if (!note) throw new NotFoundException('Nota no encontrada');
+    await this.noteRepository.remove(note); 
+  }
 }

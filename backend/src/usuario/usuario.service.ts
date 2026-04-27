@@ -1,85 +1,42 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { Repository } from "typeorm";
-import { Usuario } from "./model/usuario.model";
-import { InjectRepository } from "@nestjs/typeorm";
-import { UsuarioDto } from "./dto/usuario.dto";
-// import { bcrypt } from 'bcrypt';
-const bcrypt = require('bcrypt');
+import { ConflictException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Usuario } from './model/usuario.model';
+import { CreateUsuarioDto } from './dto/usuario.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuarioService {
-    constructor(
-        @InjectRepository(Usuario)
-        private readonly repository: Repository<Usuario>
-    ) {}
+  constructor(
+    @InjectRepository(Usuario)
+    private usuarioRepository: Repository<Usuario>,
+  ) {}
 
-    getAll() {
-        return this.repository.find({
-            select: ['id', 'name', 'email', 'created_at', 'updated_at'] // Excluye el campo password
-        });
+  async create(createUsuarioDto: CreateUsuarioDto): Promise<Omit<Usuario, 'password'>> {
+    const existe = await this.usuarioRepository.findOne({ where: { email: createUsuarioDto.email } });
+    if (existe) {
+        throw new ConflictException('El email ya está registrado');
     }
 
-    getById(id: number) {
-        // var data = this.repository.findOneBy({id: id}); // Recupera todos los campos, incluyendo password
-        var data = this.repository.findOne({
-            where: { id },
-            select: ['id', 'name', 'email', 'created_at', 'updated_at'] // Excluye el campo password
-        });
-        return data;
-    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(createUsuarioDto.password, salt);
 
-    async save(data: UsuarioDto) {
-        if(data.id != undefined && data.id != null && data.id != 0) {
-            const usuario = await this.repository.findOneBy({id: data.id});
-            if(!usuario) throw new Error(`Usuario con id ${data.id} no encontrado`);
+    const newUsuario = this.usuarioRepository.create({
+        ...createUsuarioDto,
+        password: hashedPassword
+    });
 
-            if(data.password) {
-                data.password = await this.createHashedPassword(data.password);
-            }
+    const savedUsuario = await this.usuarioRepository.save(newUsuario);
+    
+    // Retornamos el usuario pero le quitamos el password por seguridad
+    const { password, ...result } = savedUsuario;
+    return result;
+  }
 
-            await this.repository.update({id: data.id}, data);
-            return 'Se actualizo correctamente!!!';
-        } else {
-            const email = await this.repository.findOne({ where: { email: data.email } });
-            if(email) throw new Error(`El email ${data.email} ya está registrado`);
-
-            const hashedPassword = await this.createHashedPassword(data.password);
-            data.password = hashedPassword;
-
-            await this.repository.save(data);
-            return 'Se guardo correctamente!!!';
-        }
-    }
-
-    async delete(id: number) {
-        var data = await this.findById(id); // Verifica si el usuario existe antes de eliminarlo
-        if (!data) throw new NotFoundException(`Usuario con id ${id} no encontrado`);
-        await this.repository.delete({id});
-        return 'Se elimino correctamente!!!';
-    }
-
-    async findById(id: number) {
-        const usuario = await this.repository.findOne({
-            where: { id },
-            select: ['id', 'name', 'email', 'created_at', 'updated_at'] // Excluye el campo password
-        });
-
-        if(!usuario) throw new NotFoundException(`Usuario con id ${id} no encontrado`);
-
-        return usuario;
-    }
-
-    async generateJWT(data: UsuarioDto) {
-        return await this.createHashedPassword(data.password);
-    }
-
-    // Metodo para crear una contraseña hasheada
-    async createHashedPassword(password: string): Promise<string> {
-        var SALT_ROUNDS = 12;
-        return await bcrypt.hashSync(password, SALT_ROUNDS);
-    }
-    // Método para verificar la contraseña
-    async verifyPassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
-        return await bcrypt.compareSync(plainPassword, hashedPassword);
-    }
+  async findAll(): Promise<Usuario[]> {
+    return await this.usuarioRepository.find({ select: ['id', 'name', 'email', 'created_at'] }); 
+  }
+  async findByEmailForLogin(email: string): Promise<Usuario> {
+    return await this.usuarioRepository.findOne({ where: { email } });
+  }
 }

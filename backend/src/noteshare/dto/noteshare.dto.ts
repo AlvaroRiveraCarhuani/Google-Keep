@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsOptional } from "class-validator";
-import { NoteDto } from "src/note/dto/note.dto";
-import { UsuarioDto } from "src/usuario/dto/usuario.dto";
+import { CreateNoteDto } from "src/note/dto/note.dto";
+import { CreateUsuarioDto } from "src/usuario/dto/usuario.dto";
 
 export class NoteshareDto {
     @IsNumber()
@@ -12,9 +12,8 @@ export class NoteshareDto {
     role: number;
     
     @IsNotEmpty()
-    note: NoteDto;
+    note: CreateNoteDto;
 
     @IsNotEmpty()
-    usuario: UsuarioDto;
-    
+    usuario: CreateUsuarioDto;
 }

@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS note_labels;
+DROP TABLE IF EXISTS Label;
 DROP TABLE IF EXISTS Attachment;
 DROP TABLE IF EXISTS Recordatorio;
 DROP TABLE IF EXISTS Note_Share;
@@ -15,11 +17,30 @@ CREATE TABLE Usuario (
 
 CREATE TABLE Note (
     id SERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL,
-    Activo BOOLEAN NOT NULL DEFAULT TRUE,
+    title VARCHAR(255),
+    content TEXT,
+    color VARCHAR(100),
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
+    is_pinned BOOLEAN NOT NULL DEFAULT FALSE,
+    usuario_id INTEGER,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES Usuario(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Label (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    usuario_id INTEGER NOT NULL,
+    FOREIGN KEY (usuario_id) REFERENCES Usuario(id) ON DELETE CASCADE
+);
+
+CREATE TABLE note_labels (
+    note_id INTEGER NOT NULL,
+    label_id INTEGER NOT NULL,
+    PRIMARY KEY (note_id, label_id),
+    FOREIGN KEY (note_id) REFERENCES Note(id) ON DELETE CASCADE,
+    FOREIGN KEY (label_id) REFERENCES Label(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Note_Share (
