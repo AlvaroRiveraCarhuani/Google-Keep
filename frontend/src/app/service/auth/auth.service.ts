@@ -33,4 +33,9 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!localStorage.getItem('access_token');
   }
+
+  getUsuario(): any {
+    const user = localStorage.getItem('usuario');
+    return user ? JSON.parse(user) : null;
+  }
 }

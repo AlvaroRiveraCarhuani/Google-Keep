@@ -11,47 +11,54 @@ import { TooltipModule } from 'primeng/tooltip';
     standalone: true,
     imports: [CommonModule, ButtonModule, TooltipModule],
     template: `
-        <div class="p-4">
-            <h2 class="text-3xl font-bold mb-6 text-red-500">
-                <i class="pi pi-trash text-3xl mr-2"></i>Papelera
-            </h2>
+        <div class="p-6 max-w-[1600px] mx-auto">
+            <div class="flex items-center gap-4 mb-8">
+                <i class="pi pi-trash text-3xl text-red-500"></i>
+                <h2 class="text-3xl font-bold text-surface-900 dark:text-surface-0 m-0">Papelera</h2>
+            </div>
             
             @if (notasBasura.length === 0 && notasOriginales.length === 0) {
-                <div class="flex flex-col items-center justify-center mt-20 text-surface-500">
-                    <i class="pi pi-inbox text-6xl mb-4 opacity-50"></i>
-                    <p class="text-xl">La papelera está vacía</p>
+                <div class="flex flex-col items-center justify-center mt-32 opacity-40 animate-fadein">
+                    <div class="w-32 h-32 rounded-full bg-surface-100 dark:bg-surface-800 flex items-center justify-center mb-6">
+                        <i class="pi pi-trash text-5xl text-surface-400"></i>
+                    </div>
+                    <p class="text-2xl font-light">No hay notas en la papelera</p>
                 </div>
             } @else if (notasBasura.length === 0 && notasOriginales.length > 0) {
-                <div class="flex flex-col items-center justify-center mt-20 opacity-20">
-                    <i class="pi pi-search text-8xl mb-4"></i>
-                    <p class="text-2xl">No hay coincidencias en la papelera</p>
+                <div class="flex flex-col items-center justify-center mt-32 animate-fadein">
+                    <div class="w-32 h-32 rounded-full bg-surface-100 dark:bg-surface-800 flex items-center justify-center mb-6">
+                        <i class="pi pi-search text-5xl text-surface-400"></i>
+                    </div>
+                    <p class="text-xl text-surface-500 font-medium">No hay coincidencias en la papelera</p>
                 </div>
             }
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
                 @for (nota of notasBasura; track nota.id) {
-                    <div [ngClass]="nota.color ? nota.color : 'bg-surface-50 dark:bg-surface-900'" 
-                         class="card h-full flex flex-col justify-between border border-surface-200 dark:border-surface-700 opacity-80 p-4 rounded-xl">
-                        <div>
-                            <h3 class="font-bold text-xl mb-3 break-words">{{ nota.title }}</h3>
-                            <p class="whitespace-pre-wrap text-surface-600 dark:text-surface-400">{{ nota.content }}</p>
+                    <div [ngClass]="nota.color ? nota.color : 'bg-surface-0 dark:bg-surface-900 border-surface-200 dark:border-surface-700'" 
+                         class="card h-full flex flex-col justify-between border shadow-sm hover:shadow-md transition-all duration-300 opacity-80 group p-5 min-h-[180px] rounded-2xl">
+                        <div class="flex-grow">
+                            <h3 class="font-bold text-lg mb-2 break-words text-surface-900 dark:text-surface-0">{{ nota.title }}</h3>
+                            <p class="whitespace-pre-wrap text-surface-600 dark:text-surface-400 text-sm line-clamp-6">{{ nota.content }}</p>
                         </div>
-                        <div class="flex justify-end gap-2 mt-4">
+                        <div class="flex justify-end items-center gap-1 z-20 h-9 mt-4 border-t border-surface-100 dark:border-surface-800 pt-3">
                             <p-button 
                                 icon="pi pi-refresh" 
                                 [text]="true" 
-                                severity="success" 
+                                severity="secondary" 
                                 (click)="restaurar(nota.id)" 
                                 pTooltip="Restaurar"
-                                tooltipPosition="bottom">
+                                tooltipPosition="bottom"
+                                class="p-button-rounded">
                             </p-button>
                             <p-button 
-                                icon="pi pi-times" 
+                                icon="pi pi-trash" 
                                 [text]="true" 
                                 severity="danger" 
                                 (click)="eliminarDefinitivo(nota.id)" 
                                 pTooltip="Eliminar permanentemente"
-                                tooltipPosition="bottom">
+                                tooltipPosition="bottom"
+                                class="p-button-rounded">
                             </p-button>
                         </div>
                     </div>
@@ -66,7 +73,7 @@ export class Papelera implements OnInit {
     private cdr = inject(ChangeDetectorRef);
     private confirmationService = inject(ConfirmationService);
     private messageService = inject(MessageService);
-    
+
     notasOriginales: any[] = [];
     notasBasura: any[] = [];
     terminoBusqueda: string = '';
@@ -91,8 +98,8 @@ export class Papelera implements OnInit {
         if (!q) {
             this.notasBasura = [...this.notasOriginales];
         } else {
-            this.notasBasura = this.notasOriginales.filter(n => 
-                (n.title || '').toLowerCase().includes(q) || 
+            this.notasBasura = this.notasOriginales.filter(n =>
+                (n.title || '').toLowerCase().includes(q) ||
                 (n.content || '').toLowerCase().includes(q)
             );
         }

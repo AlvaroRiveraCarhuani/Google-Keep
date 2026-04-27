@@ -25,19 +25,23 @@ export class AppMenu implements OnInit {
     ngOnInit() {
         this.model = [
             {
-                label: 'Google Keep',
+                label: 'Principal',
                 items: [
-                    { label: 'Notas', icon: 'pi pi-fw pi-pencil', routerLink: ['/notas'] },
-                    { label: 'Recordatorios', icon: 'pi pi-fw pi-bell', routerLink: ['/recordatorios'] },
-                    { label: 'Archivar', icon: 'pi pi-fw pi-archive', routerLink: ['/archivar'] },
-                    { label: 'Papelera', icon: 'pi pi-fw pi-trash', routerLink: ['/papelera'] },
-                    { label: 'Editar etiquetas', icon: 'pi pi-fw pi-tags', routerLink: ['/etiquetas'] }
+                    { label: 'Notas', icon: 'pi pi-fw pi-lightbulb', routerLink: ['/notas'] },
+                    { label: 'Recordatorios', icon: 'pi pi-fw pi-bell', routerLink: ['/recordatorios'] }
                 ]
             },
             {
-                label: 'Gestión',
+                label: 'Etiquetas',
                 items: [
-                    { label: 'Mi Cuenta', icon: 'pi pi-fw pi-user', routerLink: ['/usuario'] }
+                    { label: 'Editar etiquetas', icon: 'pi pi-fw pi-pencil', routerLink: ['/etiquetas'] }
+                ]
+            },
+            {
+                label: 'Archivo',
+                items: [
+                    { label: 'Archivar', icon: 'pi pi-fw pi-download', routerLink: ['/archivar'] },
+                    { label: 'Papelera', icon: 'pi pi-fw pi-trash', routerLink: ['/papelera'] }
                 ]
             }
         ];

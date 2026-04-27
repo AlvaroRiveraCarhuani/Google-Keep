@@ -31,10 +31,10 @@ import { DialogModule } from 'primeng/dialog';
             
             <div [ngClass]="nuevaNota.color ? nuevaNota.color : 'bg-surface-0 dark:bg-surface-900'" class="flex flex-col gap-4 p-4 mt-2 rounded-t-xl transition-colors duration-200">
                 <input pInputText placeholder="Título" [(ngModel)]="nuevaNota.title" 
-                       class="w-full border-none font-bold text-xl p-0 focus:ring-0 bg-transparent" autofocus />
+                       class="w-full border-none font-bold text-xl p-0 focus:ring-0 bg-transparent text-surface-900 dark:text-surface-0" autofocus />
                 
                 <textarea pInputTextarea placeholder="Añadir una nota..." [(ngModel)]="nuevaNota.content" 
-                          rows="5" class="w-full border-none resize-none p-0 focus:ring-0 bg-transparent" [autoResize]="true"></textarea>
+                          rows="5" class="w-full border-none resize-none p-0 focus:ring-0 bg-transparent text-surface-700 dark:text-surface-300" [autoResize]="true"></textarea>
             </div>
 
             <div [ngClass]="nuevaNota.color ? nuevaNota.color : 'bg-surface-0 dark:bg-surface-900'" class="flex justify-between items-center px-4 pb-4 rounded-b-xl transition-colors duration-200">
@@ -44,7 +44,6 @@ import { DialogModule } from 'primeng/dialog';
                             class="w-6 h-6 rounded-full cursor-pointer border-2 transition-transform hover:scale-110"
                             [ngClass]="color ? color : 'bg-surface-0 dark:bg-surface-900 border-surface-200 dark:border-surface-700'"
                             [class.border-primary]="nuevaNota.color === color"
-                            [class.border-transparent]="nuevaNota.color !== color && color !== ''"
                             (click)="nuevaNota.color = color">
                         </div>
                     }
@@ -59,12 +58,12 @@ import { DialogModule } from 'primeng/dialog';
 })
 export class NotaForm {
     paleta = [
-        '', 
-        'bg-red-100 dark:bg-red-900/40', 
-        'bg-orange-100 dark:bg-orange-900/40', 
-        'bg-yellow-100 dark:bg-yellow-900/40', 
-        'bg-green-100 dark:bg-green-900/40', 
-        'bg-blue-100 dark:bg-blue-900/40', 
+        '',
+        'bg-red-100 dark:bg-red-900/40',
+        'bg-orange-100 dark:bg-orange-900/40',
+        'bg-yellow-100 dark:bg-yellow-900/40',
+        'bg-green-100 dark:bg-green-900/40',
+        'bg-blue-100 dark:bg-blue-900/40',
         'bg-purple-100 dark:bg-purple-900/40'
     ];
     nuevaNota = { title: '', content: '', color: '' };
