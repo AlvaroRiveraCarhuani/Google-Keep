@@ -85,7 +85,8 @@ interface DraftChecklistItem extends NoteChecklistItem { }
                     </div>
 
                     <div class="note-creator__footer">
-                        <button type="button" class="note-creator__close" (click)="closeCreator()">Cerrar</button>
+                        <button type="button" class="note-creator__close" (click)="resetCreator()">Cerrar</button>
+                        <button type="button" class="note-creator__btn-save" (click)="closeCreator()">Guardar</button>
                     </div>
                 </div>
             </section>
@@ -189,7 +190,25 @@ interface DraftChecklistItem extends NoteChecklistItem { }
             background: transparent; border: none; padding: 0.5rem 1rem;
             border-radius: 8px; cursor: pointer; font-weight: 600;
         }
-        .note-creator__close:hover { background: rgba(100, 116, 139, 0.1); }
+        .note-creator__close:hover {
+            background: rgba(100, 116, 139, 0.1);
+        }
+
+        .note-creator__btn-save {
+            border: none;
+            border-radius: 0.55rem;
+            background: var(--p-primary-color);
+            color: white;
+            padding: 0.45rem 1.2rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+            margin-left: 0.5rem;
+        }
+
+        .note-creator__btn-save:hover {
+            opacity: 0.9;
+        }
 
         .checklist-editor { display: grid; gap: 0.25rem; }
         .checklist-editor__row { display: flex; align-items: center; gap: 0.75rem; }
@@ -387,7 +406,7 @@ export class Notas implements OnInit {
         return { type: 'text', title: this.draftTitle.trim() || 'Nota sin titulo', description: this.draftDescription.trim(), status: 'active' };
     }
 
-    private resetCreator(): void {
+    public resetCreator(): void {
         this.isCreatorExpanded = false;
         this.draftType = 'text';
         this.draftTitle = '';
